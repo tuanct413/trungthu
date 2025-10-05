@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lồng Đèn Trung Thu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            font-family: 'Georgia', serif;
+            background: linear-gradient(to bottom, #0a0e27 0%, #1a1438 50%, #2d1b4e 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .moon {
+            position: absolute;
+            top: 10%;
+            right: 15%;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle at 30% 30%, #fff9e6, #ffd700);
+            border-radius: 50%;
+            box-shadow: 0 0 60px #ffd700, 0 0 100px rgba(255, 215, 0, 0.5);
+            animation: moonGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes moonGlow {
+            0%, 100% { box-shadow: 0 0 60px #ffd700, 0 0 100px rgba(255, 215, 0, 0.5); }
+            50% { box-shadow: 0 0 80px #ffd700, 0 0 120px rgba(255, 215, 0, 0.7); }
+        }
+
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .lantern-container {
+            position: relative;
+            z-index: 10;
+        }
+
+        .lantern {
+            position: relative;
+            width: 200px;
+            height: 280px;
+            margin: 0 60px;
+            animation: swing 3s ease-in-out infinite;
+            transform-origin: top center;
+            display: inline-block;
+        }
+
+        .lantern:nth-child(2) {
+            animation-delay: -1s;
+        }
+
+        .lantern:nth-child(3) {
+            animation-delay: -2s;
+        }
+
+        @keyframes swing {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        .rope {
+            position: absolute;
+            width: 3px;
+            height: 80px;
+            background: linear-gradient(to bottom, #8b4513, #654321);
+            left: 50%;
+            top: -80px;
+            transform: translateX(-50%);
+        }
+
+        .lantern-top {
+            width: 100%;
+            height: 30px;
+            background: linear-gradient(to bottom, #d4af37, #c19b2e);
+            border-radius: 50% 50% 0 0;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.5);
+        }
+
+        .lantern-body {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 50%, #c44569 100%);
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(238, 90, 111, 0.6), inset 0 0 50px rgba(255, 255, 255, 0.1);
+        }
+
+        .lantern.green .lantern-body {
+            background: linear-gradient(135deg, #38ef7d 0%, #11998e 100%);
+            box-shadow: 0 10px 40px rgba(56, 239, 125, 0.6), inset 0 0 50px rgba(255, 255, 255, 0.1);
+        }
+
+        .lantern.yellow .lantern-body {
+            background: linear-gradient(135deg, #f7b733 0%, #fc4a1a 100%);
+            box-shadow: 0 10px 40px rgba(247, 183, 51, 0.6), inset 0 0 50px rgba(255, 255, 255, 0.1);
+        }
+
+        .pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .pattern-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 215, 0, 0.3);
+        }
+
+        .pattern-line:nth-child(1) { top: 25%; }
+        .pattern-line:nth-child(2) { top: 50%; }
+        .pattern-line:nth-child(3) { top: 75%; }
+
+        .vertical-line {
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            background: rgba(255, 215, 0, 0.3);
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .lantern-symbol {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 48px;
+            font-weight: bold;
+            color: rgba(255, 215, 0, 0.9);
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+            font-family: 'Arial', sans-serif;
+        }
+
+        .glow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 255, 200, 0.4) 0%, transparent 70%);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .lantern-bottom {
+            width: 100%;
+            height: 30px;
+            background: linear-gradient(to top, #d4af37, #c19b2e);
+            border-radius: 0 0 50% 50%;
+            box-shadow: 0 -4px 15px rgba(212, 175, 55, 0.5);
+        }
+
+        .tassel {
+            position: absolute;
+            width: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 100%;
+        }
+
+        .tassel-top {
+            width: 40px;
+            height: 20px;
+            background: linear-gradient(to bottom, #d4af37, #c19b2e);
+            margin: 0 auto;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .tassel-strings {
+            display: flex;
+            justify-content: center;
+            gap: 3px;
+            margin-top: 5px;
+        }
+
+        .string {
+            width: 2px;
+            height: 60px;
+            background: linear-gradient(to bottom, #ff6b6b, #c44569);
+            animation: tasselSwing 2s ease-in-out infinite;
+        }
+
+        .lantern.green .string {
+            background: linear-gradient(to bottom, #38ef7d, #11998e);
+        }
+
+        .lantern.yellow .string {
+            background: linear-gradient(to bottom, #f7b733, #fc4a1a);
+        }
+
+        .string:nth-child(2) { animation-delay: 0.1s; }
+        .string:nth-child(3) { animation-delay: 0.2s; }
+        .string:nth-child(4) { animation-delay: 0.3s; }
+        .string:nth-child(5) { animation-delay: 0.4s; }
+
+        @keyframes tasselSwing {
+            0%, 100% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+        }
+
+        .message {
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            color: #ffd700;
+            font-size: 32px;
+            font-weight: bold;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 0 0 40px rgba(255, 215, 0, 0.5);
+            animation: fadeInOut 4s ease-in-out infinite;
+            white-space: nowrap;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(0.95); }
+            50% { opacity: 1; transform: translateX(-50%) scale(1); }
+        }
+
+        .click-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px 40px;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(238, 90, 111, 0.6);
+            transition: all 0.3s ease;
+            z-index: 100;
+            animation: buttonPulse 2s ease-in-out infinite;
+        }
+
+        .click-button:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            box-shadow: 0 15px 40px rgba(238, 90, 111, 0.8);
+        }
+
+        .click-button:active {
+            transform: translate(-50%, -50%) scale(0.95);
+        }
+
+        @keyframes buttonPulse {
+            0%, 100% { box-shadow: 0 10px 30px rgba(238, 90, 111, 0.6); }
+            50% { box-shadow: 0 15px 50px rgba(238, 90, 111, 0.9); }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .firework {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            animation: explode 1s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: translate(0, 0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--x), var(--y));
+                opacity: 0;
+            }
+        }
+
+        .lantern-container.show {
+            animation: slideDown 1.5s ease-out forwards;
+        }
+
+        @keyframes slideDown {
+            0% {
+                transform: translateY(-100vh) scale(0.5);
+                opacity: 0;
+            }
+            60% {
+                transform: translateY(20px) scale(1.1);
+                opacity: 1;
+            }
+            80% {
+                transform: translateY(-10px) scale(0.95);
+            }
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .moon.show {
+            animation: moonAppear 2s ease-out forwards, moonGlow 3s ease-in-out infinite 2s;
+        }
+
+        @keyframes moonAppear {
+            0% {
+                transform: scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2) rotate(180deg);
+            }
+            100% {
+                transform: scale(1) rotate(360deg);
+                opacity: 1;
+            }
+        }
+
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ff6b6b;
+            transform: rotate(45deg);
+            animation: floatHeart 3s ease-in forwards;
+            opacity: 0;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ff6b6b;
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            left: -10px;
+        }
+
+        .heart::after {
+            top: -10px;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                bottom: 0;
+                opacity: 1;
+                transform: rotate(45deg) translateX(0);
+            }
+            100% {
+                bottom: 100vh;
+                opacity: 0;
+                transform: rotate(45deg) translateX(100px);
+            }
+        }
+
+        .photo-album {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 200;
+            display: none;
+        }
+
+        .photo-album.active {
+            display: block;
+            animation: albumAppear 1s ease-out forwards;
+        }
+
+        @keyframes albumAppear {
+            0% {
+                transform: translate(-50%, -50%) scale(0) rotate(180deg);
+                opacity: 0;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .photo-grid {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 90vw;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .photo-card {
+            background: white;
+            padding: 15px;
+            padding-bottom: 60px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: rotate(0deg);
+            transition: all 0.3s ease;
+            animation: photoFloat 3s ease-in-out infinite;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .photo-card:nth-child(odd) {
+            animation-delay: -1.5s;
+        }
+
+        .photo-card:hover {
+            transform: scale(1.1) rotate(0deg) !important;
+            z-index: 10;
+            box-shadow: 0 20px 50px rgba(255, 215, 0, 0.6);
+        }
+
+        @keyframes photoFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(var(--rotation));
+            }
+            50% {
+                transform: translateY(-10px) rotate(var(--rotation));
+            }
+        }
+
+        .photo-card.shooting {
+            animation: shootOut 1.5s ease-out forwards !important;
+        }
+
+        @keyframes shootOut {
+            0% {
+                transform: scale(0) rotate(720deg);
+                opacity: 0;
+            }
+            60% {
+                transform: scale(1.2) rotate(var(--rotation));
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1) rotate(var(--rotation));
+                opacity: 1;
+            }
+        }
+
+        .photo-card:nth-child(3n+1) {
+            --rotation: -3deg;
+        }
+
+        .photo-card:nth-child(3n+2) {
+            --rotation: 2deg;
+        }
+
+        .photo-card:nth-child(3n) {
+            --rotation: -2deg;
+        }
+
+        .photo-img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+            border: 2px solid #f0f0f0;
+        }
+
+        .photo-caption {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 16px;
+            color: #333;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+
+        .close-album {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(238, 90, 111, 0.6);
+            transition: all 0.3s ease;
+            z-index: 201;
+            display: none;
+        }
+
+        .close-album.active {
+            display: block;
+            animation: buttonPulse 2s ease-in-out infinite;
+        }
+
+        .close-album:hover {
+            transform: scale(1.2) rotate(90deg);
+        }
+
+        .upload-section {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 50;
+            display: none;
+        }
+
+        .upload-section.active {
+            display: block;
+            animation: slideUp 1s ease-out forwards;
+        }
+
+        @keyframes slideUp {
+            0% {
+                transform: translateX(-50%) translateY(100px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .upload-btn {
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, #f7b733, #fc4a1a);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(247, 183, 51, 0.6);
+            transition: all 0.3s ease;
+            animation: buttonPulse 2s ease-in-out infinite;
+        }
+
+        .upload-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(247, 183, 51, 0.8);
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .photo-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 199;
+            display: none;
+        }
+
+        .photo-overlay.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .cloud1 {
+            width: 200px;
+            height: 60px;
+            top: 20%;
+            left: -200px;
+        }
+
+        .cloud2 {
+            width: 150px;
+            height: 45px;
+            top: 40%;
+            left: -150px;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(100vw + 200px)); }
+        }
+    </style>
+</head>
+<body>
+    <button class="click-button" id="startBtn">Bấm vào đây! 💝</button>
+
+    <div class="moon hidden" id="moon"></div>
+    
+    <div class="stars" id="stars"></div>
+    
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+
+    <div class="lantern-container hidden" id="lanternContainer">
+        <div class="lantern">
+            <div class="rope"></div>
+            <div class="lantern-top"></div>
+            <div class="lantern-body">
+                <div class="pattern">
+                    <div class="pattern-line"></div>
+                    <div class="pattern-line"></div>
+                    <div class="pattern-line"></div>
+                    <div class="vertical-line"></div>
+                </div>
+                <div class="glow"></div>
+                <div class="lantern-symbol">福</div>
+            </div>
+            <div class="lantern-bottom"></div>
+            <div class="tassel">
+                <div class="tassel-top"></div>
+                <div class="tassel-strings">
+                    <div class="string"></div>
+                    <div class="string"></div>
+                    <div class="string"></div>
+                    <div class="string"></div>
+                    <div class="string"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="lantern green">
+            <div class="rope"></div>
+            <div class="lantern-top"></div>
+            <div class="lantern-body">
+                <div class="pattern">
+                    <div class="pattern-line"></div>
+                    <div class="pattern-line"></div>
+                    <div class="pattern-line"></div>
+                    <div class="vertical-line"></div>
+                </div>
+                <div class="glow"></div>
+                <div class="lantern-symbol">愛</div>
+            </div>
+            <div class="lantern-bottom"></div>
+            <div class="tassel">
+                <div class="tassel-top"></div>
+                <div class="tassel-strings">
+                    <div class="string"></div>
+                    <div class="string"></div>
+                    <div class="string"></div>
+                    <div class="string"></div>
+                    <div class="string"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="lantern yellow">
+            <div class="rope"></div>
+            <div class="lantern-top"></div>
+            <div class="lantern-body">
+                <div class="pattern">
+                    <div class="pattern-line"></div>
+                    <div class="pattern-line"></div>
+                    <div class="pattern-line"></div>
+                    <div class="vertical-line"></div>
+                </div>
+                <div class="glow"></div>
+                <div class="lantern-symbol">月</div>
+            </div>
+            <div class="lantern-bottom"></div>
+            <div class="tassel">
+                <div class="tassel-top"></div>
+                <div class="tassel-strings">
+                    <div class="string"></div>
+                    <div class="string"></div>
+                    <div class="string"></div>
+                    <div class="string"></div>
+                    <div class="string"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="message hidden" id="message">Trung Thu Vui Vẻ ❤️</div>
+
+    <div class="upload-section" id="uploadSection">
+        <input type="file" id="fileInput" accept="image/*" multiple>
+      
+    </div>
+
+    <div class="photo-overlay" id="photoOverlay"></div>
+    <button class="close-album" id="closeAlbum">✕</button>
+    <div class="photo-album" id="photoAlbum">
+        <div class="photo-grid" id="photoGrid"></div>
+    </div>
+
+    <script>
+        const startBtn = document.getElementById('startBtn');
+        const lanternContainer = document.getElementById('lanternContainer');
+        const moon = document.getElementById('moon');
+        const messageEl = document.getElementById('message');
+        const uploadSection = document.getElementById('uploadSection');
+        const fileInput = document.getElementById('fileInput');
+        const photoGrid = document.getElementById('photoGrid');
+        const photoAlbum = document.getElementById('photoAlbum');
+        const photoOverlay = document.getElementById('photoOverlay');
+        const closeAlbum = document.getElementById('closeAlbum');
+        
+        // THAY ĐỔI CÁC URL ẢNH Ở ĐÂY - thêm link ảnh của bạn vào đây
+        let photos = [
+            {
+                src: 'image/7a634b23448eced0979f1.jpg',
+                caption: 'em nhớ đi đâu không♥'
+            },
+            {
+                src: 'image/32cafb79f4d47e8a27c56.jpg',
+                caption: 'Hơi lạnh nhưng mà có người ôm🌸'
+            },
+            {
+                src: 'image/62ac88de87730d2d54623.jpg',
+                caption: 'Hạnh phúc vCCCCCllll 💕'
+            },
+            {
+                src: 'image/66a7cbffc4524e0c17432.jpg',
+                caption: ' yêu em ✨'
+            }
+        ];
+        
+        // Tạo ngôi sao
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.width = Math.random() * 3 + 'px';
+            star.style.height = star.style.width;
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 2 + 's';
+            star.style.animationDuration = (Math.random() * 2 + 1) + 's';
+            starsContainer.appendChild(star);
+        }
+
+        // Hàm tạo pháo hoa
+        function createFirework(x, y) {
+            const colors = ['#ff6b6b', '#ffd700', '#38ef7d', '#f7b733', '#ee5a6f'];
+            for (let i = 0; i < 30; i++) {
+                const firework = document.createElement('div');
+                firework.className = 'firework';
+                firework.style.left = x + 'px';
+                firework.style.top = y + 'px';
+                firework.style.background = colors[Math.floor(Math.random() * colors.length)];
+                
+                const angle = (Math.PI * 2 * i) / 30;
+                const velocity = 50 + Math.random() * 50;
+                firework.style.setProperty('--x', Math.cos(angle) * velocity + 'px');
+                firework.style.setProperty('--y', Math.sin(angle) * velocity + 'px');
+                
+                document.body.appendChild(firework);
+                
+                setTimeout(() => firework.remove(), 1000);
+            }
+        }
+
+        // Hàm tạo trái tim bay
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.bottom = '0';
+            document.body.appendChild(heart);
+            
+            setTimeout(() => heart.remove(), 3000);
+        }
+
+        // Xử lý khi click nút
+        startBtn.addEventListener('click', function(e) {
+            // Tạo pháo hoa tại vị trí nút
+            const rect = startBtn.getBoundingClientRect();
+            createFirework(rect.left + rect.width / 2, rect.top + rect.height / 2);
+            
+            // Ẩn nút
+            startBtn.style.animation = 'explode 0.5s ease-out forwards';
+            setTimeout(() => startBtn.classList.add('hidden'), 500);
+            
+            // Hiện mặt trăng
+            setTimeout(() => {
+                moon.classList.remove('hidden');
+                moon.classList.add('show');
+            }, 600);
+            
+            // Hiện lồng đèn
+            setTimeout(() => {
+                lanternContainer.classList.remove('hidden');
+                lanternContainer.classList.add('show');
+            }, 1000);
+            
+            // Hiện message
+            setTimeout(() => {
+                messageEl.classList.remove('hidden');
+            }, 2000);
+            
+            // Tự động bắn ảnh ra sau 3 giây
+            setTimeout(() => {
+                shootPhotos();
+            }, 3500);
+            
+            // Tạo pháo hoa ngẫu nhiên
+            const fireworkInterval = setInterval(() => {
+                createFirework(
+                    Math.random() * window.innerWidth,
+                    Math.random() * window.innerHeight
+                );
+            }, 1000);
+            
+            setTimeout(() => clearInterval(fireworkInterval), 5000);
+            
+            // Tạo trái tim bay
+            const heartInterval = setInterval(() => {
+                createHeart();
+            }, 500);
+            
+            setTimeout(() => clearInterval(heartInterval), 8000);
+        });
+
+        // Hàm bắn ảnh ra từ lồng đèn
+        function shootPhotos() {
+            photoOverlay.classList.add('active');
+            photoAlbum.classList.add('active');
+            closeAlbum.classList.add('active');
+            uploadSection.classList.add('active');
+            
+            // Tạo pháo hoa khi bắt đầu
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    createFirework(
+                        window.innerWidth / 2 + (Math.random() - 0.5) * 300,
+                        window.innerHeight / 2 + (Math.random() - 0.5) * 200
+                    );
+                }, i * 200);
+            }
+            
+            // Hiển thị từng ảnh với hiệu ứng bắn ra
+            photos.forEach((photo, index) => {
+                setTimeout(() => {
+                    const card = document.createElement('div');
+                    card.className = 'photo-card shooting';
+                    
+                    const img = document.createElement('img');
+                    img.className = 'photo-img';
+                    img.src = photo.src;
+                    img.alt = 'Ảnh kỷ niệm';
+                    
+                    const caption = document.createElement('div');
+                    caption.className = 'photo-caption';
+                    caption.textContent = photo.caption;
+                    
+                    card.appendChild(img);
+                    card.appendChild(caption);
+                    photoGrid.appendChild(card);
+                    
+                    // Pháo hoa mỗi khi ảnh xuất hiện
+                    createFirework(
+                        Math.random() * window.innerWidth,
+                        Math.random() * window.innerHeight / 2
+                    );
+                    
+                    // Chuyển sang animation float sau khi bắn xong
+                    setTimeout(() => {
+                        card.classList.remove('shooting');
+                        card.style.animation = 'photoFloat 3s ease-in-out infinite';
+                        if (index % 2 === 0) {
+                            card.style.animationDelay = '-1.5s';
+                        }
+                    }, 1500);
+                }, index * 400);
+            });
+        }
+
+        // Xử lý upload ảnh
+        fileInput.addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            
+            files.forEach((file, fileIndex) => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(event) {
+                        // Thêm ảnh mới vào mảng
+                        const newPhoto = {
+                            src: event.target.result,
+                            caption: `Kỷ niệm ${photos.length + 1} ♥`
+                        };
+                        photos.push(newPhoto);
+                        
+                        // Hiển thị ảnh mới với hiệu ứng bắn ra
+                        setTimeout(() => {
+                            const card = document.createElement('div');
+                            card.className = 'photo-card shooting';
+                            
+                            const img = document.createElement('img');
+                            img.className = 'photo-img';
+                            img.src = newPhoto.src;
+                            img.alt = 'Ảnh kỷ niệm';
+                            
+                            const caption = document.createElement('div');
+                            caption.className = 'photo-caption';
+                            caption.textContent = newPhoto.caption;
+                            
+                            card.appendChild(img);
+                            card.appendChild(caption);
+                            photoGrid.appendChild(card);
+                            
+                            // Pháo hoa
+                            createFirework(
+                                Math.random() * window.innerWidth,
+                                Math.random() * window.innerHeight / 2
+                            );
+                            
+                            // Chuyển sang float
+                            setTimeout(() => {
+                                card.classList.remove('shooting');
+                                card.style.animation = 'photoFloat 3s ease-in-out infinite';
+                            }, 1500);
+                        }, fileIndex * 400);
+                    };
+                    
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+
+        // Đóng album
+        closeAlbum.addEventListener('click', function() {
+            photoOverlay.classList.remove('active');
+            photoAlbum.classList.remove('active');
+            closeAlbum.classList.remove('active');
+        });
+
+        photoOverlay.addEventListener('click', function() {
+            photoOverlay.classList.remove('active');
+            photoAlbum.classList.remove('active');
+            closeAlbum.classList.remove('active');
+        });
+
+        // Thay đổi message
+        const messages = [
+            'Trung Thu Zui zẻ nhó❤️',
+            'Chúc Em MÃi không thoát được anh 🌙',
+            'Anh Yêu Em ✨',
+            'Mãi Mãi Bên Nhau Bạn ..... 💕'
+        ];
+        
+        let messageIndex = 0;
+        
+        setInterval(() => {
+            if (!messageEl.classList.contains('hidden')) {
+                messageIndex = (messageIndex + 1) % messages.length;
+                messageEl.style.opacity = '0';
+                setTimeout(() => {
+                    messageEl.textContent = messages[messageIndex];
+                    messageEl.style.opacity = '1';
+                }, 500);
+            }
+        }, 4000);
+    </script>
+</body>
+</html>
